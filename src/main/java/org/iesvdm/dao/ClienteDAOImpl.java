@@ -2,6 +2,7 @@ package org.iesvdm.dao;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.iesvdm.modelo.Cliente;
@@ -32,9 +33,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 		
 							//Desde java15+ se tiene la triple quote """ para bloques de texto como cadenas.
 		String sqlInsert = """
-							INSERT INTO cliente (nombre, apellido1, apellido2, ciudad, categoría) 
+							INSERT INTO cliente (nombre, apellido1, apellido2, ciudad, categoría)\s
 							VALUES  (     ?,         ?,         ?,       ?,         ?)
-						   """;
+									""";
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		//Con recuperación de id generado
@@ -49,16 +50,16 @@ public class ClienteDAOImpl implements ClienteDAO {
 			return ps;
 		},keyHolder);
 		
-		cliente.setId(keyHolder.getKey().intValue());
+		cliente.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 		
 		//Sin recuperación de id generado
-//		int rows = jdbcTemplate.update(sqlInsert,
-//							cliente.getNombre(),
-//							cliente.getApellido1(),
-//							cliente.getApellido2(),
-//							cliente.getCiudad(),
-//							cliente.getCategoria()
-//					);
+		//		int rows = jdbcTemplate.update(sqlInsert,
+		//							cliente.getNombre(),
+		//							cliente.getApellido1(),
+		//							cliente.getApellido2(),
+		//							cliente.getCiudad(),
+		//							cliente.getCategoria()
+		//					);
 
 		log.info("Insertados {} registros.", rows);
 	}
@@ -117,12 +118,12 @@ public class ClienteDAOImpl implements ClienteDAO {
 	public void update(Cliente cliente) {
 		
 		int rows = jdbcTemplate.update("""
-										UPDATE cliente SET 
-														nombre = ?, 
-														apellido1 = ?, 
+										UPDATE cliente SET
+														nombre = ?,
+														apellido1 = ?,
 														apellido2 = ?,
 														ciudad = ?,
-														categoría = ?  
+														categoría = ?
 												WHERE id = ?
 										""", cliente.getNombre()
 										, cliente.getApellido1()
