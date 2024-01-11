@@ -19,9 +19,12 @@ public class ClienteService {
 	}
 	
 	public List<Cliente> listAll() {
-		
 		return clienteDAO.getAll();
-		
+	}
+
+	//BorrarCliente
+	public void deleteCliente(int id) {
+		clienteDAO.delete(id);
 	}
 	
 	

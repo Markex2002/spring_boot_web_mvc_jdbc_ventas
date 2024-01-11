@@ -6,9 +6,8 @@ import org.iesvdm.modelo.Cliente;
 import org.iesvdm.service.ClienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 //Se puede fijar ruta base de las peticiones de este controlador.
@@ -35,12 +34,16 @@ public class ClienteController {
 		model.addAttribute("listaClientes", listaClientes);
 				
 		return "clientes";
-		
 	}
-	
-	
-	
-	
-	
 
+
+
+
+	//Borrar Cliente
+	@PostMapping("/clientes/borrar/{id}")
+	public RedirectView submitBorrar(@PathVariable Integer id) {
+		clienteService.deleteCliente(id);
+
+		return new RedirectView("/clientes");
+	}
 }
