@@ -141,11 +141,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 	 */
 	@Override
 	public void delete(long id) {
-		
 		int rows = jdbcTemplate.update("DELETE FROM cliente WHERE id = ?", id);
 		
-		log.info("Delete de Cliente con {} registros eliminados.", rows);		
-		
+		log.info("Delete de Cliente con {} registros eliminados.", rows);
 	}
 	
 }

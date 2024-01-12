@@ -22,11 +22,17 @@ public class ClienteService {
 		return clienteDAO.getAll();
 	}
 
-	//BorrarCliente
+
+	//Crear Cliente
+	public void crearCliente(Cliente cliente){
+		clienteDAO.create(cliente);
+	}
+
+
+
+	//Borrar Cliente
 	public void deleteCliente(int id) {
 		clienteDAO.delete(id);
 	}
-	
-	
 
 }
