@@ -2,10 +2,11 @@ package org.iesvdm.service;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.iesvdm.dao.ClienteDAO;
 import org.iesvdm.modelo.Cliente;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 public class ClienteService {
 	
@@ -26,6 +27,7 @@ public class ClienteService {
 	//Crear Cliente
 	public void crearCliente(Cliente cliente){
 		clienteDAO.create(cliente);
+		log.info("ID cliente creado {}", cliente.getId());
 	}
 
 

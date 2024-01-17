@@ -11,8 +11,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import lombok.extern.slf4j.Slf4j;
+import java.sql.Statement;
+
+
 
 //Anotación lombok para logging (traza) de la aplicación
 @Slf4j
@@ -24,7 +30,64 @@ public class ClienteDAOImpl implements ClienteDAO {
 	 //Plantilla jdbc inyectada automáticamente por el framework Spring, gracias a la anotación @Autowired.
 	 @Autowired
 	 private JdbcTemplate jdbcTemplate;
-	
+
+	public void create_SIN_RECARGA_DE_ID(Cliente cliente) {
+		jdbcTemplate.update("""
+                               INSERT INTO cliente
+                               (nombre, apellido1, apellido2, ciudad, categoría)
+                               VALUE
+                               (?, ?, ?, ?, ?)
+                               """
+				, cliente.getNombre()
+				, cliente.getApellido1()
+				, cliente.getApellido2()
+				, cliente.getCiudad()
+				, cliente.getCategoria());
+		//NO SE ACTUALIZA EL ID AUTO_INCREMENT DE MYSQL EN EL BEAN DE CLIENTE
+	}
+	public void create_CON_RECARGA_DE_ID_POR_PS(Cliente cliente) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		jdbcTemplate.update(connection -> {
+			PreparedStatement ps = connection
+					.prepareStatement("""
+                               INSERT INTO cliente
+                               (nombre, apellido1, apellido2, ciudad, categoría)
+                               VALUE
+                               (?, ?, ?, ?, ?)
+                               """, Statement.RETURN_GENERATED_KEYS);
+			int idx = 1;
+			ps.setString(idx++, cliente.getNombre());
+			ps.setString(idx++, cliente.getApellido1());
+			ps.setString(idx++, cliente.getApellido2());
+			ps.setString(idx++, cliente.getCiudad());
+			ps.setInt(idx++, cliente.getCategoria());
+			return ps;
+		}, keyHolder);
+		//SE ACTUALIZA EL ID AUTO_INCREMENT DE MYSQL EN EL BEAN DE CLIENTE MEDIANTE EL KEYHOLDER
+		cliente.setId(keyHolder.getKey().intValue());
+	}
+
+
+	public void create_CON_RECARGA_DE_ID_POR_SIMPLEJDBCINSERT(Cliente cliente) {
+
+		SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+		simpleJdbcInsert
+				.withTableName("cliente")
+				.usingGeneratedKeyColumns("id");
+		SqlParameterSource params = new MapSqlParameterSource()
+				.addValue("nombre", cliente.getNombre())
+				.addValue("apellido1", cliente.getApellido1())
+				.addValue("apellido2", cliente.getApellido2())
+				.addValue("ciudad", cliente.getCiudad())
+				.addValue("categoría", cliente.getCategoria());
+		Number number = simpleJdbcInsert.executeAndReturnKey(params);
+
+		cliente.setId(number.intValue());
+	}
+
+
+
 	/**
 	 * Inserta en base de datos el nuevo Cliente, actualizando el id en el bean Cliente.
 	 */
@@ -33,7 +96,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 		
 							//Desde java15+ se tiene la triple quote """ para bloques de texto como cadenas.
 		String sqlInsert = """
-							INSERT INTO cliente (nombre, apellido1, apellido2, ciudad, categoría)\s
+							INSERT INTO cliente (nombre, apellido1, apellido2, ciudad, categoría)
 							VALUES  (     ?,         ?,         ?,       ?,         ?)
 									""";
 		
@@ -145,5 +208,4 @@ public class ClienteDAOImpl implements ClienteDAO {
 		
 		log.info("Delete de Cliente con {} registros eliminados.", rows);
 	}
-	
 }
