@@ -29,14 +29,38 @@ public class ClienteController {
 	//equivalente a la siguiente anotación
 	@GetMapping({"/clientes", "/clients"}) //Al no tener ruta base para el controlador, cada método tiene que tener la ruta completa
 	public String listar(Model model) {
-		
 		List<Cliente> listaClientes =  clienteService.listAll();
 		model.addAttribute("listaClientes", listaClientes);
-				
+
 		return "clientes";
 	}
 
+	//Editar un Cliente
+	@GetMapping("/clientes/editar/{id}")
+	public String editar(Model model, @PathVariable Integer id) {
+		Cliente cliente = clienteService.one(id);
+		model.addAttribute("cliente", cliente);
 
+		return "editar-cliente";
+	}
+	@PostMapping("/clientes/editar/{id}")
+	public RedirectView submitEditar(@ModelAttribute("cliente") Cliente cliente) {
+		clienteService.replaceCliente(cliente);
+
+		return new RedirectView("/clientes");
+	}
+
+	//Mostrar detalles del cliente
+	@GetMapping("/clientes/{id}")
+	public String detalle(Model model, @PathVariable Integer id ) {
+
+		Cliente cliente = clienteService.one(id);
+		model.addAttribute("cliente", cliente);
+
+		return "detalle-cliente";
+	}
+
+	//Crear nuevo Cliente
 	@GetMapping("/clientes/crear")
 	public String crear(Model model) {
 
@@ -53,11 +77,6 @@ public class ClienteController {
 
 		return new RedirectView("/clientes") ;
 	}
-
-
-
-
-
 
 	//Borrar Cliente
 	@PostMapping("/clientes/borrar/{id}")

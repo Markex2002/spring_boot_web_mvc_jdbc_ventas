@@ -1,0 +1,14 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    background-color: coral;
+}
+#contenedora{
+    background-color: coral;
+}
+h1{
+    color: red;
+}

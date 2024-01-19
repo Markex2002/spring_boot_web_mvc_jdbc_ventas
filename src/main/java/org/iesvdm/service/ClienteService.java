@@ -1,6 +1,7 @@
 package org.iesvdm.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 import org.iesvdm.dao.ClienteDAO;
@@ -24,17 +25,30 @@ public class ClienteService {
 	}
 
 
+	//Método que comprueba si el cliente que hemos buscado existe
+	public Cliente one(Integer id) {
+		Optional<Cliente> optCli = clienteDAO.find(id);
+		if (optCli.isPresent())
+			return optCli.get();
+		else
+			return null;
+	}
+
+	//Editar un cliente existente
+	public void replaceCliente(Cliente cliente) {
+
+		clienteDAO.update(cliente);
+	}
+
+
 	//Crear Cliente
 	public void crearCliente(Cliente cliente){
 		clienteDAO.create(cliente);
 		log.info("ID cliente creado {}", cliente.getId());
 	}
 
-
-
 	//Borrar Cliente
 	public void deleteCliente(int id) {
 		clienteDAO.delete(id);
 	}
-
 }

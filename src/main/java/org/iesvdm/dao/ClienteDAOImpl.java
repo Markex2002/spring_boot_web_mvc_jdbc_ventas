@@ -196,7 +196,6 @@ public class ClienteDAOImpl implements ClienteDAO {
 										, cliente.getId());
 		
 		log.info("Update de Cliente con {} registros actualizados.", rows);
-    
 	}
 
 	/**
