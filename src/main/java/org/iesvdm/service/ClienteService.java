@@ -28,10 +28,7 @@ public class ClienteService {
 	//Método que comprueba si el cliente que hemos buscado existe
 	public Cliente one(Integer id) {
 		Optional<Cliente> optCli = clienteDAO.find(id);
-		if (optCli.isPresent())
-			return optCli.get();
-		else
-			return null;
+        return optCli.orElse(null);
 	}
 
 	//Editar un cliente existente

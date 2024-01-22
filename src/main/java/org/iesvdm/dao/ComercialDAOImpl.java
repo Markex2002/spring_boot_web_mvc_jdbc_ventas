@@ -1,6 +1,7 @@
 package org.iesvdm.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,10 +28,36 @@ public class ComercialDAOImpl implements ComercialDAO {
 	//
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+
+	public void create_CON_RECARGA_DE_ID_POR_PS(Comercial comercial) {
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		jdbcTemplate.update(connection -> {
+			PreparedStatement ps = connection
+					.prepareStatement("""
+                               INSERT INTO cliente
+                               (nombre, apellido1, apellido2, comisión)
+                               VALUE
+                               (?, ?, ?, ?)
+                               """, Statement.RETURN_GENERATED_KEYS);
+			int idx = 1;
+			ps.setString(idx++, comercial.getNombre());
+			ps.setString(idx++, comercial.getApellido1());
+			ps.setString(idx++, comercial.getApellido2());
+			ps.setFloat(idx++, comercial.getComision());
+			return ps;
+		}, keyHolder);
+		//SE ACTUALIZA EL ID AUTO_INCREMENT DE MYSQL EN EL BEAN DE CLIENTE MEDIANTE EL KEYHOLDER
+		comercial.setId(keyHolder.getKey().intValue());
+	}
+
+
 	
 	@Override
 	public void create(Comercial comercial) {
 		// TODO Auto-generated method stub
+
 
 		//Desde java15+ se tiene la triple quote """ para bloques de texto como cadenas.
 		String sqlInsert = """

@@ -11,8 +11,8 @@
 }
 
 </style>
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
 <body>
 
 	<div id="contenedora" style="float:none; margin: 0 auto;width: 95%;" >
@@ -59,12 +59,11 @@
 				<form th:action="@{/comerciales/editar/}+${comercial.id} " style="display: inline;">
     				<input type="submit" value="Editar" />
 				</form>
-				<form th:action="@{/clientes/borrar/__${comercial.}_id_}" method="post" style="display: inline;">
+				<form th:action="@{/clientes/borrar/__${comercial.id}__}" method="post" style="display: inline;">
     				<input type="submit" value="Eliminar" />
 				</form>
 			</div>
 		</div>
 	</div>
-</body>
 </body>
 </html>
