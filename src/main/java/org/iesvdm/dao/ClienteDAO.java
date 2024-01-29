@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.iesvdm.modelo.Cliente;
 
 public interface ClienteDAO {
-
 	public void create(Cliente cliente);
 	
 	public List<Cliente> getAll();

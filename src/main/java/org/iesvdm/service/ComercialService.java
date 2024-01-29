@@ -2,7 +2,10 @@ package org.iesvdm.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.iesvdm.dao.ComercialDAO;
+import org.iesvdm.dao.PedidoDAOImpl;
 import org.iesvdm.modelo.Comercial;
+import org.iesvdm.modelo.Pedido;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +14,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class ComercialService {
-
 	private ComercialDAO comercialDAO;
 
 	//Se utiliza inyección automática por constructor del framework Spring.
@@ -36,7 +38,6 @@ public class ComercialService {
 		comercialDAO.update(comercial);
 	}
 
-
 	//Crear Comercial
 	public void crearComercial(Comercial comercial){
 		comercialDAO.create(comercial);
@@ -47,5 +48,17 @@ public class ComercialService {
 	public void deleteComercial(int id) {
 		comercialDAO.delete(id);
 	}
-}
 
+
+
+
+
+
+	//Creamos atributo para usarlo luego
+	@Autowired
+	private PedidoDAOImpl pedidoDAO;
+
+	public List<Pedido> mostrarPedidos(int id){
+		return pedidoDAO.getAllByComercialId(id);
+	}
+}

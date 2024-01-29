@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Clientes</title>
+<title>Comerciales</title>
 <style>
 .clearfix::after {
 	content: "";
@@ -59,7 +59,7 @@
 				<form th:action="@{/comerciales/editar/}+${comercial.id} " style="display: inline;">
     				<input type="submit" value="Editar" />
 				</form>
-				<form th:action="@{/clientes/borrar/__${comercial.id}__}" method="post" style="display: inline;">
+				<form th:action="@{/comerciales/borrar/__${comercial.id}__}" method="post" style="display: inline;">
     				<input type="submit" value="Eliminar" />
 				</form>
 			</div>
