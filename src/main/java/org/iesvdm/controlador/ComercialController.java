@@ -73,6 +73,9 @@ public class ComercialController {
 		List<Pedido> listaPedido = comercialService.mostrarPedidos(id);
 		model.addAttribute("listaPedido", listaPedido);
 
+		model.addAttribute("totalPedidos", comercialService.totalPedidos(id));
+		model.addAttribute("mediaPedidos", comercialService.mediaTotalPedidos(id));
+
 		//Conseguimos la Lista de los nombres de Cliente de los pedidos
 		//ClienteDAO clienteDAO = new ClienteDAOImpl();
 		//List<Cliente> listaClientes = clienteDAO.getAll();

@@ -61,4 +61,28 @@ public class ComercialService {
 	public List<Pedido> mostrarPedidos(int id){
 		return pedidoDAO.getAllByComercialId(id);
 	}
+
+	//Método para sacar la media de el Total de los Pedidos del Comerciante
+	public double mediaTotalPedidos(int id){
+		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(id);
+		double total = 0;
+
+		for(Pedido pedido : pedidos){
+			total += pedido.getTotal();
+		}
+
+		return total/pedidos.size();
+	}
+
+	//Método para sacar el Total de los Pedidos del Comerciante
+	public double totalPedidos(int id){
+		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(id);
+		double total = 0;
+
+		for(Pedido pedido : pedidos){
+			total += pedido.getTotal();
+		}
+
+		return total;
+	}
 }
