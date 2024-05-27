@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class ComercialService {
-	private ComercialDAO comercialDAO;
+	private final ComercialDAO comercialDAO;
 
 	//Se utiliza inyección automática por constructor del framework Spring.
 	//Por tanto, se puede omitir la anotación Autowired

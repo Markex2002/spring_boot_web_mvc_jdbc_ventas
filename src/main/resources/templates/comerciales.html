@@ -25,7 +25,7 @@
 				<div style="position: absolute; left: 39%; top : 39%;">
 					
 						<form action="/comerciales/crear">
-							<input type="submit" value="Crear">
+							<input type="submit" th:value="#{bton.crear}">
 						</form>
 					</div>
 				
@@ -51,16 +51,16 @@
 			<div style="float: left;width: 14%" th:text="${comercial.nombre}">nombre</div>
 			<div style="float: left;width: 14%" th:text="${comercial.apellido1}">apellido1</div>
 			<div style="float: left;width: 14%" th:text="${comercial.apellido2 ?: '&nbsp;'}">apellido2</div>
-			<div style="float: left;width: 14%" th:text="${comercial.comision}">ciudad</div>
+			<div style="float: left;width: 14%" th:text="${comercial.comision}">Comisión</div>
 			<div style="float: none;width: auto;overflow: hidden;">
 				<form th:action="@{/comerciales/__${comercial.id}__}" style="display: inline;">
-    				<input type="submit" value="Ver Detalle" />
+    				<input th:value="#{detalle}" type="submit" value="Ver Detalle" />
 				</form>
 				<form th:action="@{/comerciales/editar/}+${comercial.id} " style="display: inline;">
-    				<input type="submit" value="Editar" />
+    				<input th:value="#{editar}" type="submit" value="Editar" />
 				</form>
 				<form th:action="@{/comerciales/borrar/__${comercial.id}__}" method="post" style="display: inline;">
-    				<input type="submit" value="Eliminar" />
+    				<input th:value="#{eliminar}" type="submit" value="Eliminar" />
 				</form>
 			</div>
 		</div>

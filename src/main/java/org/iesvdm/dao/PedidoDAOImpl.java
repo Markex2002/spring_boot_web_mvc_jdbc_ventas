@@ -128,23 +128,6 @@ public class PedidoDAOImpl implements PedidoDAO {
 
 
 	@Override
-	public List<Pedido> getAllByComercialId() {
-
-		List<Pedido> listPedido = jdbcTemplate.query(
-				"SELECT * FROM pedido",
-				(rs, rowNum) -> new Pedido(rs.getInt("id"),
-						rs.getDouble("total"),
-						rs.getDate("fecha"),
-						rs.getInt("id_cliente"),
-						rs.getInt("id_comercial"))
-		);
-
-		log.info("Devueltos {} registros.", listPedido.size());
-		return listPedido;
-	}
-
-
-	@Override
 	public Optional<Pedido> find(int id) {
 		// TODO Auto-generated method stub
 		Pedido fab =  jdbcTemplate

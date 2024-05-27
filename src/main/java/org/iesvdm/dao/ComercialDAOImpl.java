@@ -36,7 +36,7 @@ public class ComercialDAOImpl implements ComercialDAO {
 		jdbcTemplate.update(connection -> {
 			PreparedStatement ps = connection
 					.prepareStatement("""
-                               INSERT INTO cliente
+                               INSERT INTO comercial
                                (nombre, apellido1, apellido2, comisión)
                                VALUE
                                (?, ?, ?, ?)

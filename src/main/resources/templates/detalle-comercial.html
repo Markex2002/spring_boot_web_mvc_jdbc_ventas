@@ -87,10 +87,10 @@
     <hr style="margin-top: 5px; margin-bottom: 5px">
     <div class="clearfix">
         <div style="float: left;width: 14%">Id</div>
-        <div style="float: left;width: 14%">Nombre</div>
-        <div style="float: left;width: 14%">Apellido1</div>
-        <div style="float: left;width: 14%">Apellido2</div>
-        <div style="float: left;width: 14%">Comisión</div>
+        <div style="float: left;width: 14%">Total</div>
+        <div style="float: left;width: 14%">Fecha</div>
+        <div style="float: left;width: 14%">id_Cliente</div>
+        <div style="float: left;width: 14%">id_Comercial</div>
         <div style="float: none;width: auto;overflow: hidden;">Acción</div>
     </div>
 
@@ -101,6 +101,11 @@
         <div style="float: left;width: 14%" th:text="${pedido.fecha}">fecha</div>
         <div style="float: left;width: 14%" th:text="${pedido.idCliente ?: '&nbsp;'}">id_cliente</div>
         <div style="float: left;width: 14%" th:text="${pedido.idComercial ?: '&nbsp;'}">id_cliente</div>
+        <div style="float: none;width: auto;overflow: hidden;">
+            <form th:action="@{/clientes/__${pedido.idCliente}__}" style="display: inline;">
+                <input type="submit" value="Ver Detalle" />
+            </form>
+        </div>
     </div>
 
 

@@ -1,7 +1,11 @@
 package org.iesvdm.controlador;
 
+import org.iesvdm.dao.ClienteDAO;
+import org.iesvdm.dao.ClienteDAOImpl;
+import org.iesvdm.modelo.Cliente;
 import org.iesvdm.modelo.Comercial;
 import org.iesvdm.modelo.Pedido;
+import org.iesvdm.service.ClienteService;
 import org.iesvdm.service.ComercialService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,7 +25,7 @@ import java.util.List;
 //@RequestMapping("/clientes")
 public class ComercialController {
 
-	private ComercialService comercialService;
+	private final ComercialService comercialService;
 
 	//Se utiliza inyección automática por constructor del framework Spring.
 	//Por tanto, se puede omitir la anotación Autowired
@@ -48,6 +53,7 @@ public class ComercialController {
 
 		return "editar-comercial";
 	}
+
 	@PostMapping("/comerciales/editar/{id}")
 	public RedirectView submitEditar(@ModelAttribute("comercial") Comercial comercial) {
 		comercialService.replaceComercial(comercial);
@@ -59,11 +65,29 @@ public class ComercialController {
 	@GetMapping("/comerciales/{id}")
 	public String detalle(Model model, @PathVariable Integer id ) {
 
+		//Conseguimos el Comercial en específico
 		Comercial comercial = comercialService.one(id);
 		model.addAttribute("comercial", comercial);
 
+		//Conseguimos la Lista de Pedidos a la que está asociado el Comercial
 		List<Pedido> listaPedido = comercialService.mostrarPedidos(id);
 		model.addAttribute("listaPedido", listaPedido);
+
+		//Conseguimos la Lista de los nombres de Cliente de los pedidos
+		//ClienteDAO clienteDAO = new ClienteDAOImpl();
+		//List<Cliente> listaClientes = clienteDAO.getAll();
+
+		//List<String> listaNombres = new ArrayList<>();
+
+		//for (Pedido pedido : listaPedido) {
+		//	for (Cliente cliente : listaClientes){
+		//		if (cliente.getId() == pedido.getIdCliente()){
+		//			listaNombres.add(cliente.getNombre());
+		//		}
+		//	}
+		//}
+
+		//model.addAttribute("listaNombres", listaNombres);
 
 		return "detalle-comercial";
 	}

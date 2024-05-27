@@ -11,8 +11,6 @@ public interface PedidoDAO {
 	public List<Pedido> getAll();
 	public List<Pedido> getAllByComercialId(int id);
 
-	List<Pedido> getAllByComercialId();
-
 	public Optional<Pedido>  find(int id);
 	
 	public void update(Pedido pedido);
