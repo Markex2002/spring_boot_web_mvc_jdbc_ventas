@@ -66,23 +66,27 @@ public class ComercialService {
 	public double mediaTotalPedidos(int id){
 		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(id);
 		double total = 0;
-
-		for(Pedido pedido : pedidos){
-			total += pedido.getTotal();
+		double media = 0;
+		if (!pedidos.isEmpty()){
+			for(Pedido pedido : pedidos){
+				total += pedido.getTotal();
+			}
+			media = total/pedidos.size();
 		}
-
-		return total/pedidos.size();
+		return media;
 	}
 
 	//Método para sacar el Total de los Pedidos del Comerciante
 	public double totalPedidos(int id){
 		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(id);
 		double total = 0;
-
 		for(Pedido pedido : pedidos){
 			total += pedido.getTotal();
 		}
-
 		return total;
+	}
+
+	public String sacarNombrePedido(int id){
+		return comercialDAO.sacarNombrePorID(id);
 	}
 }

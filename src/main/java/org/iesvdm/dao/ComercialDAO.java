@@ -16,4 +16,6 @@ public interface ComercialDAO {
 	
 	public void delete(long id);
 
+	public String sacarNombrePorID(long id);
+
 }

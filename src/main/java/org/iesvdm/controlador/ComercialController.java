@@ -2,11 +2,16 @@ package org.iesvdm.controlador;
 
 import org.iesvdm.dao.ClienteDAO;
 import org.iesvdm.dao.ClienteDAOImpl;
+import org.iesvdm.dao.ComercialDAO;
+import org.iesvdm.dao.ComercialDAOImpl;
 import org.iesvdm.modelo.Cliente;
 import org.iesvdm.modelo.Comercial;
 import org.iesvdm.modelo.Pedido;
+import org.iesvdm.modelo.PedidoDTO;
 import org.iesvdm.service.ClienteService;
 import org.iesvdm.service.ComercialService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,26 +76,24 @@ public class ComercialController {
 
 		//Conseguimos la Lista de Pedidos a la que está asociado el Comercial
 		List<Pedido> listaPedido = comercialService.mostrarPedidos(id);
-		model.addAttribute("listaPedido", listaPedido);
+
+		List<PedidoDTO> listaPedidoNombreClientes = new ArrayList<>();
+		for (Pedido pedido : listaPedido) {
+			PedidoDTO pedidoDTO = new PedidoDTO();
+			pedidoDTO.setId(pedido.getId());
+			pedidoDTO.setFecha(pedido.getFecha());
+			pedidoDTO.setIdComercial(pedido.getIdComercial());
+			pedidoDTO.setIdCliente(pedido.getIdCliente());
+			pedidoDTO.setTotal(pedido.getTotal());
+			pedidoDTO.setNombreCliente(comercialService.sacarNombrePedido(pedido.getIdCliente()));
+
+			listaPedidoNombreClientes.add(pedidoDTO);
+		}
+
+		model.addAttribute("listaPedido", listaPedidoNombreClientes);
 
 		model.addAttribute("totalPedidos", comercialService.totalPedidos(id));
 		model.addAttribute("mediaPedidos", comercialService.mediaTotalPedidos(id));
-
-		//Conseguimos la Lista de los nombres de Cliente de los pedidos
-		//ClienteDAO clienteDAO = new ClienteDAOImpl();
-		//List<Cliente> listaClientes = clienteDAO.getAll();
-
-		//List<String> listaNombres = new ArrayList<>();
-
-		//for (Pedido pedido : listaPedido) {
-		//	for (Cliente cliente : listaClientes){
-		//		if (cliente.getId() == pedido.getIdCliente()){
-		//			listaNombres.add(cliente.getNombre());
-		//		}
-		//	}
-		//}
-
-		//model.addAttribute("listaNombres", listaNombres);
 
 		return "detalle-comercial";
 	}

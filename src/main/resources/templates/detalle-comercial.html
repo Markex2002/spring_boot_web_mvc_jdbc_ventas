@@ -103,7 +103,7 @@
         <div style="float: left;width: 14%" th:text="${pedido.idComercial ?: '&nbsp;'}">id_cliente</div>
         <div style="float: none;width: auto;overflow: hidden;">
             <form th:action="@{/clientes/__${pedido.idCliente}__}" style="display: inline;">
-                <input type="submit" value="Ver Detalle" />
+                <input type="submit" th:value="${pedido.nombreCliente}" />
             </form>
         </div>
     </div>

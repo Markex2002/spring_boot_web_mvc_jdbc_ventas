@@ -156,4 +156,15 @@ public class ComercialDAOImpl implements ComercialDAO {
 
 		log.info("Delete de Comercial con {} registros eliminados.", rows);
 	}
+
+
+	@Override
+	public String sacarNombrePorID(long id){
+		String nombre =  jdbcTemplate.queryForObject("SELECT * FROM cliente WHERE id = ?"
+				, (rs, rowNum) ->  rs.getString("nombre")
+				, id
+		);
+
+		return nombre;
+	}
 }
