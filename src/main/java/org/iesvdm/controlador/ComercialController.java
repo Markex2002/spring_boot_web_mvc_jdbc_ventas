@@ -1,17 +1,9 @@
 package org.iesvdm.controlador;
 
-import org.iesvdm.dao.ClienteDAO;
-import org.iesvdm.dao.ClienteDAOImpl;
-import org.iesvdm.dao.ComercialDAO;
-import org.iesvdm.dao.ComercialDAOImpl;
-import org.iesvdm.modelo.Cliente;
 import org.iesvdm.modelo.Comercial;
 import org.iesvdm.modelo.Pedido;
 import org.iesvdm.modelo.PedidoDTO;
-import org.iesvdm.service.ClienteService;
 import org.iesvdm.service.ComercialService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,7 +95,7 @@ public class ComercialController {
 				pedidoDTO.setIdComercial(pedido.getIdComercial());
 				pedidoDTO.setIdCliente(pedido.getIdCliente());
 				pedidoDTO.setTotal(pedido.getTotal());
-				pedidoDTO.setNombreCliente(comercialService.sacarNombrePedido(pedido.getIdCliente()));
+				pedidoDTO.setNombreCliente(comercialService.sacarNombreClientePedido(pedido.getIdCliente()));
 
 				if (listaPedido.size() > 1) {
 					if(pedido.getTotal()==totalMaximo){
@@ -123,6 +115,7 @@ public class ComercialController {
 		model.addAttribute("listaPedido", listaPedidoNombreClientes);
 		model.addAttribute("totalPedidos", comercialService.totalPedidos(id));
 		model.addAttribute("mediaPedidos", comercialService.mediaTotalPedidos(id));
+		model.addAttribute("listaClientes", comercialService.listaDeCLientes(id));
 
 		return "detalle-comercial";
 	}

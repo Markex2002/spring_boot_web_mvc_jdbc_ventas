@@ -1,13 +1,17 @@
 package org.iesvdm.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.iesvdm.dao.ClienteDAOImpl;
 import org.iesvdm.dao.ComercialDAO;
 import org.iesvdm.dao.PedidoDAOImpl;
+import org.iesvdm.modelo.Cliente;
+import org.iesvdm.modelo.ClienteDTO;
 import org.iesvdm.modelo.Comercial;
 import org.iesvdm.modelo.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +19,12 @@ import java.util.Optional;
 @Service
 public class ComercialService {
 	private final ComercialDAO comercialDAO;
+
+	@Autowired
+	private PedidoDAOImpl pedidoDAO;
+
+	@Autowired
+	private ClienteDAOImpl clienteDAO;
 
 	//Se utiliza inyección automática por constructor del framework Spring.
 	//Por tanto, se puede omitir la anotación Autowired
@@ -55,9 +65,6 @@ public class ComercialService {
 
 
 	//METODOS RELACIONADOS CON EL USO DE PEDIDOS EN COMERCIAL
-	@Autowired
-	private PedidoDAOImpl pedidoDAO;
-
 	public List<Pedido> mostrarPedidos(int id){
 		return pedidoDAO.getAllByComercialId(id);
 	}
@@ -86,7 +93,52 @@ public class ComercialService {
 		return total;
 	}
 
-	public String sacarNombrePedido(int id){
+	//Método para sacar el nombre del Cliente de un Pedido en especifico
+	public String sacarNombreClientePedido(int id){
 		return comercialDAO.sacarNombrePorID(id);
+	}
+
+
+	//METODO PARA OBTENER UNA LISTA DE LOS CLIENTES DE UN COMERCIAL EN BASE A SUS PEDIDOS
+	public List<ClienteDTO> listaDeCLientes(int idComercial){
+		List<Cliente> clientes = clienteDAO.getAll();
+		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(idComercial);
+		List<ClienteDTO> listadoDeClientesConPedidos = new ArrayList<>();
+
+		for(Pedido pedido : pedidos){
+			for(Cliente cliente : clientes){
+				ClienteDTO clienteDTO = new ClienteDTO();
+				clienteDTO.setId(cliente.getId());
+				clienteDTO.setNombre(cliente.getNombre());
+				clienteDTO.setApellido1(cliente.getApellido1());
+				clienteDTO.setApellido2(cliente.getApellido2());
+				clienteDTO.setCategoria(cliente.getCategoria());
+				clienteDTO.setCiudad(cliente.getCiudad());
+
+
+				boolean meterEnLista = false;
+
+				//Si el pedido y el Cliente tienen el mismo codigo, hay que meterlo en la lista
+				if (pedido.getIdCliente() == cliente.getId()){
+					if (listadoDeClientesConPedidos.isEmpty()){
+						listadoDeClientesConPedidos.add(clienteDTO);
+					} else {
+						//Comprobamos si el cliente ya estaba en la lista
+						for (ClienteDTO clienteDTO1 : listadoDeClientesConPedidos){
+							if (clienteDTO1.getId()==cliente.getId()){
+								clienteDTO1.setPedidosPorComercial(clienteDTO1.getPedidosPorComercial() + 1);
+							} else {
+								meterEnLista = true;
+							}
+						}
+					}
+					if (meterEnLista){
+						listadoDeClientesConPedidos.add(clienteDTO);
+					}
+				}
+			}
+		}
+
+		return listadoDeClientesConPedidos;
 	}
 }
