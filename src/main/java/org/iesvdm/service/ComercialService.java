@@ -27,13 +27,13 @@ public class ComercialService {
 		return comercialDAO.getAll();
 	}
 
-	//Método que comprueba si el cliente que hemos buscado existe
+	//Método que comprueba si el comercial que hemos buscado existe
 	public Comercial one(Integer id) {
 		Optional<Comercial> optCom = comercialDAO.find(id);
         return optCom.orElse(null);
 	}
 
-	//Editar un cliente existente
+	//Editar un comercial existente
 	public void replaceComercial(Comercial comercial) {
 		comercialDAO.update(comercial);
 	}
@@ -44,7 +44,7 @@ public class ComercialService {
 		log.info("ID comercial creado {}", comercial.getId());
 	}
 
-	//Borrar Cliente
+	//Borrar comercial
 	public void deleteComercial(int id) {
 		comercialDAO.delete(id);
 	}
@@ -54,7 +54,7 @@ public class ComercialService {
 
 
 
-	//Creamos atributo para usarlo luego
+	//METODOS RELACIONADOS CON EL USO DE PEDIDOS EN COMERCIAL
 	@Autowired
 	private PedidoDAOImpl pedidoDAO;
 
