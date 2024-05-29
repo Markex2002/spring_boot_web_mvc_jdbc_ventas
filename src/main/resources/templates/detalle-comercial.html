@@ -87,11 +87,11 @@
     <hr style="margin-top: 5px; margin-bottom: 5px">
     <div class="clearfix">
         <div style="float: left;width: 14%">Id</div>
-        <div style="float: left;width: 14%">Total</div>
-        <div style="float: left;width: 14%">Fecha</div>
-        <div style="float: left;width: 14%">id_Cliente</div>
-        <div style="float: left;width: 14%">id_Comercial</div>
-        <div style="float: none;width: auto;overflow: hidden;">Acción</div>
+        <div style="float: left;width: 14%">Nombre</div>
+        <div style="float: left;width: 14%">Apellido1</div>
+        <div style="float: left;width: 14%">Apellido2</div>
+        <div style="float: left;width: 14%">Ciudad</div>
+        <div style="float: none;width: auto;overflow: hidden;">Categoría</div>
     </div>
 
     <hr style="margin-top: 5px; margin-bottom: 5px">
@@ -103,7 +103,7 @@
             <div class="maximo" style="float: left;width: 14%" th:text="${pedido.total}">total</div>
         </div>
         <div th:if="${pedido.isTotalEsMinimo()}">
-            <div class="minimo" style="float: left;width: 14%" th:text="${pedido.total}">total</div>
+            <div class="minimo" style="float: left;width: 14%   " th:text="${pedido.total}">total</div>
         </div>
         <div th:if="${not pedido.isTotalEsMinimo() and not pedido.isTotalEsMaximo()}">
             <div style="float: left;width: 14%" th:text="${pedido.total}">total</div>
@@ -119,13 +119,48 @@
         </div>
     </div>
 
+
     <div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
+
         <div style="position: absolute; left: 39%; top : 39%;">
         </div>
         <hr style="margin:10px 0px">
 
         <p style="width: 50%" class="maximo">Si el total es el Maximo</p>
         <p style="width: 50%" class="minimo">Si el total es el Minimo</p>
+    </div>
+
+
+    <h1>Clientes</h1>
+    <hr style="margin-top: 5px; margin-bottom: 5px">
+    <div class="clearfix">
+        <div style="float: left;width: 14%">Id</div>
+        <div style="float: left;width: 14%">Total</div>
+        <div style="float: left;width: 14%">Fecha</div>
+        <div style="float: left;width: 14%">id_Cliente</div>
+        <div style="float: left;width: 14%">id_Comercial</div>
+        <div style="float: none;width: auto;overflow: hidden;">Acción</div>
+    </div>
+
+    <hr style="margin-top: 5px; margin-bottom: 5px">
+    <div  th:each="pedido : ${listaPedido}" style="margin-top: 6px;" class="clearfix">
+        <div style="float: left;width: 14%" th:text="${pedido.id}">0</div>
+
+        <div style="float: left;width: 14%" th:text="${pedido.total}">fecha</div>
+        <div style="float: left;width: 14%" th:text="${pedido.fecha}">fecha</div>
+        <div style="float: left;width: 14%" th:text="${pedido.idCliente ?: '&nbsp;'}">id_cliente</div>
+        <div style="float: left;width: 14%" th:text="${pedido.idComercial ?: '&nbsp;'}">id_cliente</div>
+        <div style="float: none;width: auto;overflow: hidden;">
+            <form th:action="@{/clientes/__${pedido.idCliente}__}" style="display: inline;">
+                <input type="submit" th:value="${pedido.nombreCliente}" />
+            </form>
+        </div>
+    </div>
+
+    <div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
+        <div style="position: absolute; left: 39%; top : 39%;">
+        </div>
+        <hr style="margin:10px 0px">
     </div>
 
 
