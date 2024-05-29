@@ -97,7 +97,18 @@
     <hr style="margin-top: 5px; margin-bottom: 5px">
     <div  th:each="pedido : ${listaPedido}" style="margin-top: 6px;" class="clearfix">
         <div style="float: left;width: 14%" th:text="${pedido.id}">0</div>
-        <div style="float: left;width: 14%" th:text="${pedido.total}">total</div>
+
+        <!-- Comprobaciones para ver si el total es maximo o minimo -->
+        <div th:if="${pedido.isTotalEsMaximo()}">
+            <div class="maximo" style="float: left;width: 14%" th:text="${pedido.total}">total</div>
+        </div>
+        <div th:if="${pedido.isTotalEsMinimo()}">
+            <div class="minimo" style="float: left;width: 14%" th:text="${pedido.total}">total</div>
+        </div>
+        <div th:if="${not pedido.isTotalEsMinimo() and not pedido.isTotalEsMaximo()}">
+            <div style="float: left;width: 14%" th:text="${pedido.total}">total</div>
+        </div>
+
         <div style="float: left;width: 14%" th:text="${pedido.fecha}">fecha</div>
         <div style="float: left;width: 14%" th:text="${pedido.idCliente ?: '&nbsp;'}">id_cliente</div>
         <div style="float: left;width: 14%" th:text="${pedido.idComercial ?: '&nbsp;'}">id_cliente</div>
@@ -109,15 +120,17 @@
     </div>
 
     <div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
-
         <div style="position: absolute; left: 39%; top : 39%;">
         </div>
-        <hr style="margin-top: 5px">
+        <hr style="margin:10px 0px">
+
+        <p style="width: 50%" class="maximo">Si el total es el Maximo</p>
+        <p style="width: 50%" class="minimo">Si el total es el Minimo</p>
     </div>
 
 
     <h1>Total y Media de los Pedidos</h1>
-    <hr style="margin-top: 5px; margin-bottom: 5px">
+    <hr style="margin-top: 10px; margin-bottom: 5px">
 
     <div class="clearfix">
         <div style="float: left;width: 14%">Total</div>

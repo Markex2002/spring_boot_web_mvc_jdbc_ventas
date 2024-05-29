@@ -20,8 +20,9 @@ public class PedidoDTO {
 	private int idComercial;
 
 	private String nombreCliente;
+	private boolean totalEsMaximo;
+	private boolean totalEsMinimo;
 
 	public PedidoDTO(){
-
 	}
 }

@@ -69,7 +69,6 @@ public class ComercialController {
 	//Mostrar detalles del Comercial
 	@GetMapping("/comerciales/{id}")
 	public String detalle(Model model, @PathVariable Integer id ) {
-
 		//Conseguimos el Comercial en específico
 		Comercial comercial = comercialService.one(id);
 		model.addAttribute("comercial", comercial);
@@ -77,21 +76,51 @@ public class ComercialController {
 		//Conseguimos la Lista de Pedidos a la que está asociado el Comercial
 		List<Pedido> listaPedido = comercialService.mostrarPedidos(id);
 
+		//Usamos PedidoDTO para sacar el nombre de los Clientes de los Pedidos
 		List<PedidoDTO> listaPedidoNombreClientes = new ArrayList<>();
-		for (Pedido pedido : listaPedido) {
-			PedidoDTO pedidoDTO = new PedidoDTO();
-			pedidoDTO.setId(pedido.getId());
-			pedidoDTO.setFecha(pedido.getFecha());
-			pedidoDTO.setIdComercial(pedido.getIdComercial());
-			pedidoDTO.setIdCliente(pedido.getIdCliente());
-			pedidoDTO.setTotal(pedido.getTotal());
-			pedidoDTO.setNombreCliente(comercialService.sacarNombrePedido(pedido.getIdCliente()));
 
-			listaPedidoNombreClientes.add(pedidoDTO);
+		//Controlamos que haya más de un elemento en la lista, para que no pete
+		if (!listaPedido.isEmpty()){
+			double totalMaximo = 0;
+			double totalMinimo = listaPedido.getFirst().getTotal();
+
+
+			//Comprobamos cuál es el Maximo y el Minimo de la Lista
+			for (Pedido p : listaPedido) {
+				if (p.getTotal() > totalMaximo) {
+					totalMaximo = p.getTotal();
+				}
+				if (p.getTotal()<totalMinimo){
+					totalMinimo = p.getTotal();
+				}
+			}
+
+			//Hacemos un bucle que nos ayude a rellenar la Lista de PedidoDTO
+			for (Pedido pedido : listaPedido) {
+				PedidoDTO pedidoDTO = new PedidoDTO();
+				pedidoDTO.setId(pedido.getId());
+				pedidoDTO.setFecha(pedido.getFecha());
+				pedidoDTO.setIdComercial(pedido.getIdComercial());
+				pedidoDTO.setIdCliente(pedido.getIdCliente());
+				pedidoDTO.setTotal(pedido.getTotal());
+				pedidoDTO.setNombreCliente(comercialService.sacarNombrePedido(pedido.getIdCliente()));
+
+				if (listaPedido.size() > 1) {
+					if(pedido.getTotal()==totalMaximo){
+						pedidoDTO.setTotalEsMaximo(true);
+					}
+					if(pedido.getTotal()==totalMinimo){
+						pedidoDTO.setTotalEsMinimo(true);
+					}
+				} else {
+					pedidoDTO.setTotalEsMaximo(true);
+				}
+
+				listaPedidoNombreClientes.add(pedidoDTO);
+			}
 		}
 
 		model.addAttribute("listaPedido", listaPedidoNombreClientes);
-
 		model.addAttribute("totalPedidos", comercialService.totalPedidos(id));
 		model.addAttribute("mediaPedidos", comercialService.mediaTotalPedidos(id));
 
