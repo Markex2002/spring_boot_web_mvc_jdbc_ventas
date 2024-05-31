@@ -11,9 +11,7 @@ import org.iesvdm.modelo.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -100,10 +98,12 @@ public class ComercialService {
 
 
 	//METODO PARA OBTENER UNA LISTA DE LOS CLIENTES DE UN COMERCIAL EN BASE A SUS PEDIDOS
-	public List<ClienteDTO> listaDeCLientes(int idComercial){
+	public Set<ClienteDTO> listaDeCLientes(int idComercial){
 		List<Cliente> clientes = clienteDAO.getAll();
 		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(idComercial);
 		List<ClienteDTO> listadoDeClientesConPedidos = new ArrayList<>();
+		Set<ClienteDTO> ordenacionPedidos;
+		ordenacionPedidos = new TreeSet<>((o1, o2) ->  o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
 
 		for(Pedido pedido : pedidos){
 			for(Cliente cliente : clientes){
@@ -120,11 +120,12 @@ public class ComercialService {
 
 				//Si el pedido y el Cliente tienen el mismo codigo, hay que meterlo en la lista
 				if (pedido.getIdCliente() == cliente.getId()){
-					if (listadoDeClientesConPedidos.isEmpty()){
-						listadoDeClientesConPedidos.add(clienteDTO);
+					if (ordenacionPedidos.isEmpty()){
+						clienteDTO.setPedidosPorComercial(1);
+						ordenacionPedidos.add(clienteDTO);
 					} else {
 						//Comprobamos si el cliente ya estaba en la lista
-						for (ClienteDTO clienteDTO1 : listadoDeClientesConPedidos){
+						for (ClienteDTO clienteDTO1 : ordenacionPedidos){
 							if (clienteDTO1.getId()==cliente.getId()){
 								clienteDTO1.setPedidosPorComercial(clienteDTO1.getPedidosPorComercial() + 1);
 							} else {
@@ -133,12 +134,13 @@ public class ComercialService {
 						}
 					}
 					if (meterEnLista){
-						listadoDeClientesConPedidos.add(clienteDTO);
+						clienteDTO.setPedidosPorComercial(1);
+						ordenacionPedidos.add(clienteDTO);
 					}
 				}
 			}
 		}
 
-		return listadoDeClientesConPedidos;
+		return ordenacionPedidos;
 	}
 }

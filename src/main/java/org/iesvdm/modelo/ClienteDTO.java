@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 //Para generar un constructor con lombok con todos los args
 @AllArgsConstructor
-public class ClienteDTO {
+public class ClienteDTO implements Comparable<ClienteDTO> {
 
 	private long id;
 	private String nombre;
@@ -21,5 +21,11 @@ public class ClienteDTO {
 	private int pedidosPorComercial = 0;
 
 	public ClienteDTO(){
+	}
+
+
+	@Override
+	public int compareTo(ClienteDTO o) {
+		return o.pedidosPorComercial - this.pedidosPorComercial;
 	}
 }
