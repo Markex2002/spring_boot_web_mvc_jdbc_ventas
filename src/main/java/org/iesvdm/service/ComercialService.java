@@ -95,18 +95,24 @@ public class ComercialService {
 
 
 	//METODO PARA OBTENER UNA LISTA DE LOS CLIENTES DE UN COMERCIAL EN BASE A SUS PEDIDOS
-	public PriorityQueue<ClienteDTO> listaDeCLientes(int idComercial){
+	public List<ClienteDTO> listaDeCLientes(int idComercial){
+		//TREESET permite ordenar, pero por algun motivo no mete algunos pedidos
+		//PriorityQueu Funciona, aunque no Ordena.
+		//ArrayList, implementando un Comparable y haciendo Sort al final, es la opcion mas sencilla y funciona.
+
 		List<Cliente> clientes = clienteDAO.getAll();
 		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(idComercial);
-		///Set<ClienteDTO>
-		//ordenacionPedidos = new TreeSet<>((o1, o2) ->  (o1.getId() == o2.getId()) ?  0:  o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
-		PriorityQueue<ClienteDTO> ordenacionPedidos = new PriorityQueue<>((o1, o2) -> o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
+		List<ClienteDTO> ordenacionPedidos = new ArrayList<>();
+		//Set<ClienteDTO> ordenacionPedidos;
+		//ordenacionPedidos = new TreeSet<>((o1, o2) ->  o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
+		//PriorityQueue<ClienteDTO> ordenacionPedidos = new PriorityQueue<>((o1, o2) -> o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
 
 		for(Pedido pedido : pedidos){
 			for(Cliente cliente : clientes){
 				//Creamos un ClienteDTO usando Mapper
 				ClienteDTO clienteDTO = ClienteMapper.INSTANCE.clienteAClienteDTO(cliente);
 				boolean meterEnLista = false;
+				boolean yaSeHaMetido = false;
 
 				//Si el idCliente de pedido y el Cliente tienen el mismo código, hay que meterlo en la lista
 				if (pedido.getIdCliente() == cliente.getId()){
@@ -120,12 +126,15 @@ public class ComercialService {
 							//Si ya está en lista le aumentamos la cantidad de Pedidos
 							if (clienteDTO1.getId()==cliente.getId()){
 								clienteDTO1.setPedidosPorComercial(clienteDTO1.getPedidosPorComercial() + 1);
+								//COMO EL BUCLE SIGUE CORRIENDO DEBEMOS CONTROLAR QUE NO SE VUELVA A METER AL USUARIO POR SEGUNDA VEZ
+								yaSeHaMetido = true;
 							} else {
 								meterEnLista = true;
 							}
 						}
 					}
-					if (meterEnLista){
+					//CONTROLAMOS QUE HAYA QUE METERLO Y QUE NO SE HAYA METIDO YA
+					if (meterEnLista && !yaSeHaMetido){
 						clienteDTO.setPedidosPorComercial(1);
 						ordenacionPedidos.add(clienteDTO);
 					}
@@ -133,6 +142,7 @@ public class ComercialService {
 			}
 		}
 
+		Collections.sort(ordenacionPedidos);
 		return ordenacionPedidos;
 	}
 }
