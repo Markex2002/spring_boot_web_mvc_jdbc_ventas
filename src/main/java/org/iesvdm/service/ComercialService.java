@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.iesvdm.dao.ClienteDAOImpl;
 import org.iesvdm.dao.ComercialDAO;
 import org.iesvdm.dao.PedidoDAOImpl;
-import org.iesvdm.modelo.Cliente;
-import org.iesvdm.modelo.ClienteDTO;
-import org.iesvdm.modelo.Comercial;
-import org.iesvdm.modelo.Pedido;
+import org.iesvdm.modelo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,34 +95,29 @@ public class ComercialService {
 
 
 	//METODO PARA OBTENER UNA LISTA DE LOS CLIENTES DE UN COMERCIAL EN BASE A SUS PEDIDOS
-	public Set<ClienteDTO> listaDeCLientes(int idComercial){
+	public PriorityQueue<ClienteDTO> listaDeCLientes(int idComercial){
 		List<Cliente> clientes = clienteDAO.getAll();
 		List<Pedido> pedidos = pedidoDAO.getAllByComercialId(idComercial);
-		List<ClienteDTO> listadoDeClientesConPedidos = new ArrayList<>();
-		Set<ClienteDTO> ordenacionPedidos;
-		ordenacionPedidos = new TreeSet<>((o1, o2) ->  o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
+		///Set<ClienteDTO>
+		//ordenacionPedidos = new TreeSet<>((o1, o2) ->  (o1.getId() == o2.getId()) ?  0:  o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
+		PriorityQueue<ClienteDTO> ordenacionPedidos = new PriorityQueue<>((o1, o2) -> o2.getPedidosPorComercial() - o1.getPedidosPorComercial());
 
 		for(Pedido pedido : pedidos){
 			for(Cliente cliente : clientes){
-				ClienteDTO clienteDTO = new ClienteDTO();
-				clienteDTO.setId(cliente.getId());
-				clienteDTO.setNombre(cliente.getNombre());
-				clienteDTO.setApellido1(cliente.getApellido1());
-				clienteDTO.setApellido2(cliente.getApellido2());
-				clienteDTO.setCategoria(cliente.getCategoria());
-				clienteDTO.setCiudad(cliente.getCiudad());
-
-
+				//Creamos un ClienteDTO usando Mapper
+				ClienteDTO clienteDTO = ClienteMapper.INSTANCE.clienteAClienteDTO(cliente);
 				boolean meterEnLista = false;
 
-				//Si el pedido y el Cliente tienen el mismo codigo, hay que meterlo en la lista
+				//Si el idCliente de pedido y el Cliente tienen el mismo código, hay que meterlo en la lista
 				if (pedido.getIdCliente() == cliente.getId()){
+					//Miramos si la lista esta vacía
 					if (ordenacionPedidos.isEmpty()){
 						clienteDTO.setPedidosPorComercial(1);
 						ordenacionPedidos.add(clienteDTO);
 					} else {
-						//Comprobamos si el cliente ya estaba en la lista
+						//Recorremos la nueva lista y comprobamos si el cliente ya estaba en la lista
 						for (ClienteDTO clienteDTO1 : ordenacionPedidos){
+							//Si ya está en lista le aumentamos la cantidad de Pedidos
 							if (clienteDTO1.getId()==cliente.getId()){
 								clienteDTO1.setPedidosPorComercial(clienteDTO1.getPedidosPorComercial() + 1);
 							} else {

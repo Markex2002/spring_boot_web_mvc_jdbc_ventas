@@ -3,6 +3,7 @@ package org.iesvdm.controlador;
 import org.iesvdm.modelo.Comercial;
 import org.iesvdm.modelo.Pedido;
 import org.iesvdm.modelo.PedidoDTO;
+import org.iesvdm.modelo.PedidoMapper;
 import org.iesvdm.service.ComercialService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,13 +90,17 @@ public class ComercialController {
 
 			//Hacemos un bucle que nos ayude a rellenar la Lista de PedidoDTO
 			for (Pedido pedido : listaPedido) {
-				PedidoDTO pedidoDTO = new PedidoDTO();
-				pedidoDTO.setId(pedido.getId());
-				pedidoDTO.setFecha(pedido.getFecha());
-				pedidoDTO.setIdComercial(pedido.getIdComercial());
-				pedidoDTO.setIdCliente(pedido.getIdCliente());
-				pedidoDTO.setTotal(pedido.getTotal());
+				//USAMOS MAPPER PARA CREAR PEDIDO DTO
+				PedidoDTO pedidoDTO = PedidoMapper.INSTANCE.pedidoAPedidoDto(pedido);
 				pedidoDTO.setNombreCliente(comercialService.sacarNombreClientePedido(pedido.getIdCliente()));
+
+				//ESTO YA NO HACE FALTA HACERLO GRACIAS AL MAPPER
+					//PedidoDTO pedidoDTO = new PedidoDTO();
+					//pedidoDTO.setId(pedido.getId());
+					//pedidoDTO.setFecha(pedido.getFecha());
+					//pedidoDTO.setIdComercial(pedido.getIdComercial());
+					//pedidoDTO.setIdCliente(pedido.getIdCliente());
+					//pedidoDTO.setTotal(pedido.getTotal());
 
 				if (listaPedido.size() > 1) {
 					if(pedido.getTotal()==totalMaximo){

@@ -2,6 +2,7 @@ package org.iesvdm.modelo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 //La anotación @Data de lombok proporcionará el código de:
 //getters/setters, toString, equals y hashCode
@@ -9,9 +10,12 @@ import lombok.Data;
 @Data
 //Para generar un constructor con lombok con todos los args
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ClienteDTO implements Comparable<ClienteDTO> {
 
+	@EqualsAndHashCode.Include
 	private long id;
+
 	private String nombre;
 	private String apellido1;
 	private String apellido2;
@@ -22,7 +26,6 @@ public class ClienteDTO implements Comparable<ClienteDTO> {
 
 	public ClienteDTO(){
 	}
-
 
 	@Override
 	public int compareTo(ClienteDTO o) {
