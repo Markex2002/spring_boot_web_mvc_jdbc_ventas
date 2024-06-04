@@ -39,12 +39,18 @@
 			</div>
 			<div style="float: none;width: auto;overflow: hidden;">
 				<input th:field="*{nombre}" />
+				<ul class="text-danger" th:if="${#fields.hasErrors('nombre')}">
+					<li th:each="err : ${#fields.errors('nombre')}" th:text="${err}" class="error"></li>
+				</ul>
 			</div>
 			<div style="float: left;width: 50%">
 				apellido1
 			</div>
 			<div style="float: none;width: auto;overflow: hidden;">
 				<input th:field="*{apellido1}" />
+				<ul class="text-danger" th:if="${#fields.hasErrors('apellido1')}">
+					<li th:each="err : ${#fields.errors('apellido1')}" th:text="${err}" class="apellido1"></li>
+				</ul>
 			</div>
 			<div style="float: left;width: 50%">
 				apellido2
@@ -57,12 +63,18 @@
 			</div>
 			<div style="float: none;width: auto;overflow: hidden;">
 				<input th:field="*{ciudad}" />
+				<ul class="text-danger" th:if="${#fields.hasErrors('ciudad')}">
+					<li th:each="err : ${#fields.errors('ciudad')}" th:text="${err}" class="ciudad"></li>
+				</ul>
 			</div>
 			<div style="float: left;width: 50%">
 				Categoria
 			</div>
 			<div style="float: none;width: auto;overflow: hidden;">
 				<input th:field="*{categoria}" />
+				<ul class="text-danger" th:if="${#fields.hasErrors('categoria')}">
+					<li th:each="err : ${#fields.errors('categoria')}" th:text="${err}" class="categoria"></li>
+				</ul>
 			</div>
 		</div>
 

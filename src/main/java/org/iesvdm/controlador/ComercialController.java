@@ -1,12 +1,11 @@
 package org.iesvdm.controlador;
 
-import org.iesvdm.modelo.Comercial;
-import org.iesvdm.modelo.Pedido;
-import org.iesvdm.modelo.PedidoDTO;
-import org.iesvdm.modelo.PedidoMapper;
+import jakarta.validation.Valid;
+import org.iesvdm.modelo.*;
 import org.iesvdm.service.ComercialService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -136,11 +135,22 @@ public class ComercialController {
 	}
 
 	@PostMapping("/comerciales/crear")
-	public RedirectView submitCrear(@ModelAttribute("comercial") Comercial comercial) {
+	public String submitCrear(@Valid @ModelAttribute("comercial") Comercial comercial, BindingResult bindingResult, Model model) {
+		//En caso de que la validación falle
+		if (bindingResult.hasErrors()) {
+
+			List<Comercial> listaComercial =  comercialService.listAll();
+			model.addAttribute("listaComerciales", listaComercial);
+
+			model.addAttribute("comercial", comercial);
+
+			return "crear-comercial";
+		}
+
 
 		comercialService.crearComercial(comercial);
 
-		return new RedirectView("/comerciales") ;
+		return "comerciales";
 	}
 
 	//Borrar Comercial

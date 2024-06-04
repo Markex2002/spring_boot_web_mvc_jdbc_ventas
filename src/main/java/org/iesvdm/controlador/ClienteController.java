@@ -2,6 +2,7 @@ package org.iesvdm.controlador;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.iesvdm.modelo.Cliente;
 import org.iesvdm.modelo.ClienteDTO;
 import org.iesvdm.modelo.ClienteMapper;
@@ -10,6 +11,7 @@ import org.iesvdm.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -89,11 +91,22 @@ public class ClienteController {
 	}
 
 	@PostMapping("/clientes/crear")
-	public RedirectView submitCrear(@ModelAttribute("cliente") Cliente cliente) {
+	public String submitCrear(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingResult, Model model) {
+		//En caso de que la validación falle
+		if (bindingResult.hasErrors()) {
+
+			List<Cliente> listaClientes =  clienteService.listAll();
+			model.addAttribute("listaClientes", listaClientes);
+
+			model.addAttribute("cliente", cliente);
+
+			return "crear-cliente";
+		}
 
 		clienteService.crearCliente(cliente);
 
-		return new RedirectView("/clientes") ;
+		//return "redirect:/clientes" ;
+		return "clientes";
 	}
 
 	//Borrar Cliente
