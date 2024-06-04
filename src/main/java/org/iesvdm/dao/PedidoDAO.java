@@ -9,7 +9,9 @@ public interface PedidoDAO {
 	public void create(Pedido pedido);
 	
 	public List<Pedido> getAll();
+
 	public List<Pedido> getAllByComercialId(int id);
+	public List<Pedido> getAllByClienteId(int id);
 
 	public Optional<Pedido>  find(int id);
 	

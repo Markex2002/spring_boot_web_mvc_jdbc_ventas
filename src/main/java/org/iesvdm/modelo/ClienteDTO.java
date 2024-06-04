@@ -24,6 +24,11 @@ public class ClienteDTO implements Comparable<ClienteDTO> {
 
 	private int pedidosPorComercial = 0;
 
+	private int pedidosUltimoTrimestre = 0;
+	private int pedidosUltimoSemestre = 0;
+	private int pedidosUltimoYear = 0;
+	private int pedidosUltimoLustro = 0;
+
 	public ClienteDTO(){
 	}
 

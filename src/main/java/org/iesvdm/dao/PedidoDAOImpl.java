@@ -126,6 +126,22 @@ public class PedidoDAOImpl implements PedidoDAO {
 		return listPedido;
 	}
 
+	//Conseguir una lista de pedidos segun el Cliente asociado
+	@Override
+	public List<Pedido> getAllByClienteId(int id) {
+		List<Pedido> listPedido = jdbcTemplate.query(
+				"SELECT * FROM pedido WHERE pedido.id_cliente = ?",
+				(rs, rowNum) -> new Pedido(rs.getInt("id"),
+						rs.getDouble("total"),
+						rs.getDate("fecha"),
+						rs.getInt("id_cliente"),
+						rs.getInt("id_comercial")), id
+		);
+
+		log.info("Devueltos {} registros.", listPedido.size());
+		return listPedido;
+	}
+
 
 	@Override
 	public Optional<Pedido> find(int id) {

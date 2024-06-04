@@ -3,6 +3,9 @@ package org.iesvdm.controlador;
 import java.util.List;
 
 import org.iesvdm.modelo.Cliente;
+import org.iesvdm.modelo.ClienteDTO;
+import org.iesvdm.modelo.ClienteMapper;
+import org.iesvdm.modelo.Pedido;
 import org.iesvdm.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -57,7 +60,20 @@ public class ClienteController {
 	public String detalle(Model model, @PathVariable Integer id ) {
 
 		Cliente cliente = clienteService.one(id);
+		ClienteDTO clienteDTO = ClienteMapper.INSTANCE.clienteAClienteDTO(cliente);
 		model.addAttribute("cliente", cliente);
+
+		//Conseguimos la Lista de Pedidos a la que está asociado el Comercial
+		List<Pedido> listaPedido = clienteService.mostrarPedidos(id);
+		model.addAttribute("listaPedido", listaPedido);
+		model.addAttribute("listaComerciales", clienteService.listaDeComerciales(id));
+
+		//CONTROLAMOS LAS FECHAS EN LAS QUE SE REALIZARON EL PEDIDO
+		clienteService.insertarFechaPedidos(clienteDTO);
+		model.addAttribute("pedidosLustro", clienteDTO.getPedidosUltimoLustro());
+		model.addAttribute("pedidosYear", clienteDTO.getPedidosUltimoYear());
+		model.addAttribute("pedidosSemestre", clienteDTO.getPedidosUltimoSemestre());
+		model.addAttribute("pedidosTrimestre", clienteDTO.getPedidosUltimoTrimestre());
 
 		return "detalle-cliente";
 	}
