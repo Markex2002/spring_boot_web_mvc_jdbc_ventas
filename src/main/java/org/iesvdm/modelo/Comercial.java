@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.mapstruct.Mapper;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @Mapper
@@ -25,11 +27,19 @@ public class Comercial {
 
 	private String apellido2;
 
-//	@DecimalMax()
-//	@DecimalMin()
+
+	@DecimalMin(value = "0.276", inclusive = false , message = "Comision minima de 0.276")
+	@DecimalMax(value = "0.946", inclusive = false , message = "Comision máxima de 0.946")
 	private float comision;
 
 	public Comercial(){
-
 	}
+
+	//public float getComision() {
+	//	Double d = (Double) get("amd1");
+	//	return BigDecimal.valueOf(d);
+	//}
+
+
+
 }
