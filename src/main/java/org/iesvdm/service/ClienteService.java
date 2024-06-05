@@ -1,14 +1,12 @@
 package org.iesvdm.service;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.ZoneId;
 import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.iesvdm.dao.ClienteDAO;
 import org.iesvdm.dao.ComercialDAOImpl;
-import org.iesvdm.dao.PedidoDAO;
 import org.iesvdm.dao.PedidoDAOImpl;
 import org.iesvdm.modelo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +44,6 @@ public class ClienteService {
 
 	//Editar un cliente existente
 	public void replaceCliente(Cliente cliente) {
-
 		clienteDAO.update(cliente);
 	}
 

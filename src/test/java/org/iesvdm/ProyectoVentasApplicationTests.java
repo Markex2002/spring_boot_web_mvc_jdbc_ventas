@@ -24,7 +24,8 @@ class ProyectoVentasApplicationTests {
                 , "Martín"
                 , "Tejero"
                 , "Málaga"
-                , 1);
+                , 1
+                ,"");
 
 
         this.clienteDAO.create_CON_RECARGA_DE_ID_POR_PS(cliente);
@@ -41,7 +42,8 @@ class ProyectoVentasApplicationTests {
                 , "Martín"
                 , "Tejero"
                 , "Málaga"
-                , 1);
+                , 1
+                , "");
 
 
         this.clienteDAO.create_CON_RECARGA_DE_ID_POR_SIMPLEJDBCINSERT(cliente);

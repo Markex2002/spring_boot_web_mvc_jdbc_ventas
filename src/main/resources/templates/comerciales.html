@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
 <meta charset="UTF-8">
 <title>Comerciales</title>
@@ -9,58 +9,54 @@
 	display: block;
 	clear: both;
 }
-
 </style>
 	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 </head>
-<body>
+<body class="bg-danger-subtle">
 
-	<div id="contenedora" style="float:none; margin: 0 auto;width: 95%;" >
-		<div class="clearfix">
-			<div style="float: left; width: 50%">
+	<div class="container bg-primary-subtle p-4">
+		<div class="row d-flex align-items-center">
+			<div class="col-6">
 				<h1>Comerciales</h1>
 			</div>
-			<div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
-				
-				<div style="position: absolute; left: 39%; top : 39%;">
-					
-						<form action="/comerciales/crear">
-							<input type="submit" th:value="#{bton.crear}">
-						</form>
-					</div>
-				
+			<div class="col-6">
+				<form action="/comerciales/crear">
+					<input class="btn btn-primary" type="submit" th:value="#{bton.crear}">
+				</form>
 			</div>
 		</div>
 		<div class="clearfix">
 			<hr/>
 		</div>
-		<div class="clearfix">
-			<div style="float: left;width: 14%">Id</div>
-			<div style="float: left;width: 14%">Nombre</div>
-			<div style="float: left;width: 14%">Apellido1</div>
-			<div style="float: left;width: 14%">Apellido2</div>
-			<div style="float: left;width: 14%">Comisión</div>
-			<div style="float: none;width: auto;overflow: hidden;">Acción</div>
+		<div class="row">
+			<div class="col-12 col-md-1 col-sm-4">Id</div>
+			<div class="col-12 col-md-2 col-sm-4">Nombre</div>
+			<div class="col-12 col-md-2 col-sm-4">Apellido1</div>
+			<div class="col-12 col-md-2 col-sm-4">Apellido2</div>
+			<div class="col-12 col-md-2 col-sm-4">Comisión</div>
+			<div class="col-12 col-md-3 col-sm-4">Acción</div>
 		</div>
 		<div class="clearfix">
 			<hr/>
 		</div>
 
-		<div  th:each="comercial : ${listaComerciales}" style="margin-top: 6px;" class="clearfix">
-			<div style="float: left;width: 14%" th:text="${comercial.id}">0</div>
-			<div style="float: left;width: 14%" th:text="${comercial.nombre}">nombre</div>
-			<div style="float: left;width: 14%" th:text="${comercial.apellido1}">apellido1</div>
-			<div style="float: left;width: 14%" th:text="${comercial.apellido2 ?: '&nbsp;'}">apellido2</div>
-			<div style="float: left;width: 14%" th:text="${comercial.comision}">Comisión</div>
-			<div style="float: none;width: auto;overflow: hidden;">
-				<form th:action="@{/comerciales/__${comercial.id}__}" style="display: inline;">
-    				<input th:value="#{detalle}" type="submit" value="Ver Detalle" />
+		<div th:each="comercial : ${listaComerciales}" class="row my-2">
+			<div class="col-12 col-md-1 col-sm-4" th:text="${comercial.id}">0</div>
+			<div class="col-12 col-md-2 col-sm-4" th:text="${comercial.nombre}">nombre</div>
+			<div class="col-12 col-md-2 col-sm-4" th:text="${comercial.apellido1}">apellido1</div>
+			<div class="col-12 col-md-2 col-sm-4" th:text="${comercial.apellido2 ?: '&nbsp;'}">apellido2</div>
+			<div class="col-12 col-md-2 col-sm-4" th:text="${comercial.comision}">Comisión</div>
+			<div class="col-12 col-md-3 col-sm-4 row">
+				<form th:action="@{/comerciales/__${comercial.id}__}" class="col-4">
+    				<input class="btn btn-primary" th:value="#{detalle}" type="submit" value="Ver Detalle" />
 				</form>
-				<form th:action="@{/comerciales/editar/}+${comercial.id} " style="display: inline;">
-    				<input th:value="#{editar}" type="submit" value="Editar" />
+				<form th:action="@{/comerciales/editar/}+${comercial.id} " class="col-4">
+    				<input class="btn btn-warning" th:value="#{editar}" type="submit" value="Editar" />
 				</form>
-				<form th:action="@{/comerciales/borrar/__${comercial.id}__}" method="post" style="display: inline;">
-    				<input th:value="#{eliminar}" type="submit" value="Eliminar" />
+				<form th:action="@{/comerciales/borrar/__${comercial.id}__}" method="post" class="col-4">
+    				<input class="btn btn-danger" th:value="#{eliminar}" type="submit" value="Eliminar" />
 				</form>
 			</div>
 		</div>

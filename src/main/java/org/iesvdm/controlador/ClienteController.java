@@ -51,10 +51,20 @@ public class ClienteController {
 		return "editar-cliente";
 	}
 	@PostMapping("/clientes/editar/{id}")
-	public RedirectView submitEditar(@ModelAttribute("cliente") Cliente cliente) {
+	public String submitEditar(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingResult, Model model) {
+		//En caso de que la validación falle
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("cliente", cliente);
+
+			return "editar-cliente";
+		}
+
 		clienteService.replaceCliente(cliente);
 
-		return new RedirectView("/clientes");
+		List<Cliente> listaClientes =  clienteService.listAll();
+		model.addAttribute("listaClientes", listaClientes);
+
+		return "redirect:/clientes" ;
 	}
 
 	//Mostrar detalles del cliente
@@ -95,9 +105,6 @@ public class ClienteController {
 		//En caso de que la validación falle
 		if (bindingResult.hasErrors()) {
 
-			List<Cliente> listaClientes =  clienteService.listAll();
-			model.addAttribute("listaClientes", listaClientes);
-
 			model.addAttribute("cliente", cliente);
 
 			return "crear-cliente";
@@ -105,8 +112,11 @@ public class ClienteController {
 
 		clienteService.crearCliente(cliente);
 
-		//return "redirect:/clientes" ;
-		return "clientes";
+		List<Cliente> listaClientes =  clienteService.listAll();
+		model.addAttribute("listaClientes", listaClientes);
+
+		return "redirect:/clientes" ;
+		//return "clientes";
 	}
 
 	//Borrar Cliente

@@ -52,10 +52,21 @@ public class ComercialController {
 	}
 
 	@PostMapping("/comerciales/editar/{id}")
-	public RedirectView submitEditar(@ModelAttribute("comercial") Comercial comercial) {
+	public String submitEditar(@Valid @ModelAttribute("comercial") Comercial comercial, BindingResult bindingResult, Model model) {
+		//En caso de que la validación falle
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("comercial", comercial);
+
+			return "editar-comercial";
+		}
+
 		comercialService.replaceComercial(comercial);
 
-		return new RedirectView("/comerciales");
+		List<Comercial> listaComercial =  comercialService.listAll();
+		model.addAttribute("listaComerciales", listaComercial);
+
+		//return "comerciales";
+		return "redirect:/comerciales";
 	}
 
 	//Mostrar detalles del Comercial
@@ -138,19 +149,18 @@ public class ComercialController {
 	public String submitCrear(@Valid @ModelAttribute("comercial") Comercial comercial, BindingResult bindingResult, Model model) {
 		//En caso de que la validación falle
 		if (bindingResult.hasErrors()) {
-
-			List<Comercial> listaComercial =  comercialService.listAll();
-			model.addAttribute("listaComerciales", listaComercial);
-
 			model.addAttribute("comercial", comercial);
 
 			return "crear-comercial";
 		}
 
-
 		comercialService.crearComercial(comercial);
 
-		return "comerciales";
+		List<Comercial> listaComercial =  comercialService.listAll();
+		model.addAttribute("listaComerciales", listaComercial);
+
+		//return "comerciales";
+		return "redirect:/comerciales";
 	}
 
 	//Borrar Comercial

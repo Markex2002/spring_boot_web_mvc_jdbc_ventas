@@ -21,6 +21,7 @@ public class ClienteDTO implements Comparable<ClienteDTO> {
 	private String apellido2;
 	private String ciudad;
 	private int categoria;
+	private String correo;
 
 	private int pedidosPorComercial = 0;
 

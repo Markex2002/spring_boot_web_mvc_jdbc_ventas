@@ -1,9 +1,6 @@
 package org.iesvdm.modelo;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.mapstruct.Mapper;
@@ -20,23 +17,28 @@ public class Cliente {
 
 	private long id;
 
-	@NotBlank(message = "Por Favor, Introduzca su nombre")
-	@Size(max = 30, message = "Nombre con Maximo de 30 Caracteres")
+	@NotBlank(message = "{cliente.error.nombre}")
+	@Size(max = 30, message = "{cliente.error.nombre.size.max}")
 	private String nombre;
 
-	@NotBlank(message = "Por Favor, Introduzca su apellido")
-	@Size(max = 30, message = "apellido con Maximo de 30 Caracteres")
+	@NotBlank(message = "{cliente.error.apellido}")
+	@Size(max = 30, message = "{cliente.error.apellido.size.max}")
 	private String apellido1;
 
 	private String apellido2;
 
-	@NotBlank(message = "Por Favor, introduzca el nombre de su ciudad")
-	@Size(max = 50, message = "ciudad con Maximo de 30 Caracteres")
+	@NotBlank(message = "{cliente.error.ciudad}")
+	@Size(max = 50, message = "{cliente.error.ciudad.size.max}")
 	private String ciudad;
 
-	@Min(value = 100, message = "Categoria debe ser al menos de 100")
-	@Max(value = 1000, message = "Categoria debe ser menor de 100")
+	@Min(value = 100, message = "{cliente.error.categoria.size.min}")
+	@Max(value = 1000, message = "{cliente.error.categoria.size.max}")
 	private int categoria;
+
+
+	@Email(message = "{cliente.error.correo}",
+	regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}")
+	private String correo;
 
 
 	public Cliente(){

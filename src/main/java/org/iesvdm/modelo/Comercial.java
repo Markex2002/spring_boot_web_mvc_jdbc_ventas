@@ -17,28 +17,23 @@ public class Comercial {
 
 	private int id;
 
-	@NotBlank(message = "Por Favor, introduzca su nombre")
-	@Size(max = 30, message = "nombre con Maximo de 30 Caracteres")
+	@NotBlank(message = "{comercial.error.nombre}")
+	@Size(max = 30, message = "{comercial.error.nombre.size.max}")
 	private String nombre;
 
-	@NotBlank(message = "Por Favor, introduzca su apellido")
-	@Size(max = 30, message = "apellido con Maximo de 30 Caracteres")
+	@NotBlank(message = "{comercial.error.apellido}")
+	@Size(max = 30, message = "{comercial.error.apellido.size.max}")
 	private String apellido1;
 
 	private String apellido2;
 
 
-	@DecimalMin(value = "0.276", inclusive = false , message = "Comision minima de 0.276")
-	@DecimalMax(value = "0.946", inclusive = false , message = "Comision máxima de 0.946")
-	private float comision;
+	@DecimalMin(value = "0.276", message = "{comercial.error.comision.size.min}")
+	@DecimalMax(value = "0.946", message = "{comercial.error.comision.size.max}")
+	private BigDecimal comision;
 
 	public Comercial(){
 	}
-
-	//public float getComision() {
-	//	Double d = (Double) get("amd1");
-	//	return BigDecimal.valueOf(d);
-	//}
 
 
 

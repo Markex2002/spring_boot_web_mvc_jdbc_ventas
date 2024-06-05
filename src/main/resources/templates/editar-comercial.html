@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Editar Comercial</title>
@@ -49,6 +49,9 @@
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
                 <input th:field="*{nombre}"/>
+                <ul class="text-danger" th:if="${#fields.hasErrors('nombre')}">
+                    <li th:each="err : ${#fields.errors('nombre')}" th:text="${err}" class="nombre"></li>
+                </ul>
             </div>
         </div>
         <div style="margin-top: 6px;" class="clearfix">
@@ -57,6 +60,9 @@
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
                 <input th:field="*{apellido1}"/>
+                <ul class="text-danger" th:if="${#fields.hasErrors('apellido1')}">
+                    <li th:each="err : ${#fields.errors('apellido1')}" th:text="${err}" class="apellido1"></li>
+                </ul>
             </div>
         </div>
         <div style="margin-top: 6px;" class="clearfix">
@@ -72,7 +78,10 @@
                 <label>Comision</label>
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
-                <input th:field="*{comision}"/>
+                <input th:field="*{comision}" />
+                <ul class="text-danger" th:if="${#fields.hasErrors('comision')}">
+                    <li th:each="err : ${#fields.errors('comision')}" th:text="${err}" class="comision"></li>
+                </ul>
             </div>
         </div>
     </form>

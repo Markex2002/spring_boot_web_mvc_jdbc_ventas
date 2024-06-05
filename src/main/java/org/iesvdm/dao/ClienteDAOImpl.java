@@ -34,15 +34,16 @@ public class ClienteDAOImpl implements ClienteDAO {
 	public void create_SIN_RECARGA_DE_ID(Cliente cliente) {
 		jdbcTemplate.update("""
                                INSERT INTO cliente
-                               (nombre, apellido1, apellido2, ciudad, categoría)
+                               (nombre, apellido1, apellido2, ciudad, categoría, correo)
                                VALUE
-                               (?, ?, ?, ?, ?)
+                               (?, ?, ?, ?, ?, ?)
                                """
 				, cliente.getNombre()
 				, cliente.getApellido1()
 				, cliente.getApellido2()
 				, cliente.getCiudad()
-				, cliente.getCategoria());
+				, cliente.getCategoria()
+				, cliente.getCorreo());
 		//NO SE ACTUALIZA EL ID AUTO_INCREMENT DE MYSQL EN EL BEAN DE CLIENTE
 	}
 	public void create_CON_RECARGA_DE_ID_POR_PS(Cliente cliente) {
@@ -52,9 +53,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 			PreparedStatement ps = connection
 					.prepareStatement("""
                                INSERT INTO cliente
-                               (nombre, apellido1, apellido2, ciudad, categoría)
+                               (nombre, apellido1, apellido2, ciudad, categoría, correo)
                                VALUE
-                               (?, ?, ?, ?, ?)
+                               (?, ?, ?, ?, ?. ?)
                                """, Statement.RETURN_GENERATED_KEYS);
 			int idx = 1;
 			ps.setString(idx++, cliente.getNombre());
@@ -62,6 +63,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 			ps.setString(idx++, cliente.getApellido2());
 			ps.setString(idx++, cliente.getCiudad());
 			ps.setInt(idx++, cliente.getCategoria());
+			ps.setString(idx, cliente.getCorreo());
 			return ps;
 		}, keyHolder);
 		//SE ACTUALIZA EL ID AUTO_INCREMENT DE MYSQL EN EL BEAN DE CLIENTE MEDIANTE EL KEYHOLDER
@@ -80,7 +82,8 @@ public class ClienteDAOImpl implements ClienteDAO {
 				.addValue("apellido1", cliente.getApellido1())
 				.addValue("apellido2", cliente.getApellido2())
 				.addValue("ciudad", cliente.getCiudad())
-				.addValue("categoría", cliente.getCategoria());
+				.addValue("categoría", cliente.getCategoria())
+				.addValue("correo", cliente.getCorreo());
 		Number number = simpleJdbcInsert.executeAndReturnKey(params);
 
 		cliente.setId(number.intValue());
@@ -96,9 +99,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 		
 							//Desde java15+ se tiene la triple quote """ para bloques de texto como cadenas.
 		String sqlInsert = """
-							INSERT INTO cliente (nombre, apellido1, apellido2, ciudad, categoría)
-							VALUES  (     ?,         ?,         ?,       ?,         ?)
-									""";
+							INSERT INTO cliente (nombre, apellido1, apellido2, ciudad, categoría, correo)
+							VALUES  (     ?,         ?,         ?,       ?,         ?,		?)
+								\t""";
 		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		//Con recuperación de id generado
@@ -109,7 +112,9 @@ public class ClienteDAOImpl implements ClienteDAO {
 			ps.setString(idx++, cliente.getApellido1());
 			ps.setString(idx++, cliente.getApellido2());
 			ps.setString(idx++, cliente.getCiudad());
-			ps.setInt(idx, cliente.getCategoria());
+			ps.setInt(idx++, cliente.getCategoria());
+			ps.setString(idx, cliente.getCorreo());
+
 			return ps;
 		},keyHolder);
 		
@@ -140,7 +145,8 @@ public class ClienteDAOImpl implements ClienteDAO {
                 						 	rs.getString("apellido1"),
                 						 	rs.getString("apellido2"),
                 						 	rs.getString("ciudad"),
-                						 	rs.getInt("categoría")
+                						 	rs.getInt("categoría"),
+											rs.getString("correo")
                 						 	)
         );
 		
@@ -163,7 +169,8 @@ public class ClienteDAOImpl implements ClienteDAO {
             						 						rs.getString("apellido1"),
             						 						rs.getString("apellido2"),
             						 						rs.getString("ciudad"),
-            						 						rs.getInt("categoría")) 
+            						 						rs.getInt("categoría"),
+															rs.getString("correo"))
 								, id
 								);
 		
@@ -186,14 +193,17 @@ public class ClienteDAOImpl implements ClienteDAO {
 														apellido1 = ?,
 														apellido2 = ?,
 														ciudad = ?,
-														categoría = ?
+														categoría = ?,
+														correo = ?
 												WHERE id = ?
 										""", cliente.getNombre()
 										, cliente.getApellido1()
 										, cliente.getApellido2()
 										, cliente.getCiudad()
 										, cliente.getCategoria()
+										, cliente.getCorreo()
 										, cliente.getId());
+
 		
 		log.info("Update de Cliente con {} registros actualizados.", rows);
 	}

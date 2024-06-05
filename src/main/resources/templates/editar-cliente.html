@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Editar Cliente</title>
@@ -49,6 +49,9 @@
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
                 <input th:field="*{nombre}"/>
+                <ul class="text-danger" th:if="${#fields.hasErrors('nombre')}">
+                    <li th:each="err : ${#fields.errors('nombre')}" th:text="${err}" class="error"></li>
+                </ul>
             </div>
         </div>
         <div style="margin-top: 6px;" class="clearfix">
@@ -57,6 +60,9 @@
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
                 <input th:field="*{apellido1}"/>
+                <ul class="text-danger" th:if="${#fields.hasErrors('apellido1')}">
+                    <li th:each="err : ${#fields.errors('apellido1')}" th:text="${err}" class="apellido1"></li>
+                </ul>
             </div>
         </div>
         <div style="margin-top: 6px;" class="clearfix">
@@ -73,6 +79,9 @@
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
                 <input th:field="*{ciudad}"/>
+                <ul class="text-danger" th:if="${#fields.hasErrors('ciudad')}">
+                    <li th:each="err : ${#fields.errors('ciudad')}" th:text="${err}" class="ciudad"></li>
+                </ul>
             </div>
         </div>
         <div style="margin-top: 6px;" class="clearfix">
@@ -81,7 +90,19 @@
             </div>
             <div style="float: none;width: auto;overflow: hidden;">
                 <input th:field="*{categoria}"/>
+                <ul class="text-danger" th:if="${#fields.hasErrors('categoria')}">
+                    <li th:each="err : ${#fields.errors('categoria')}" th:text="${err}" class="categoria"></li>
+                </ul>
             </div>
+        </div>
+        <div style="float: left;width: 50%">
+            Correo
+        </div>
+        <div style="float: none;width: auto;overflow: hidden;">
+            <input th:field="*{correo}" />
+            <ul class="text-danger" th:if="${#fields.hasErrors('correo')}">
+                <li th:each="err : ${#fields.errors('correo')}" th:text="${err}" class="correo"></li>
+            </ul>
         </div>
     </form>
 </div>
