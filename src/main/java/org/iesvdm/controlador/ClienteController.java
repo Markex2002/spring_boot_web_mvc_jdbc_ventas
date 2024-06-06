@@ -3,6 +3,7 @@ package org.iesvdm.controlador;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import org.iesvdm.controlador.Excepciones.MiExcepcion;
 import org.iesvdm.modelo.Cliente;
 import org.iesvdm.modelo.ClienteDTO;
 import org.iesvdm.modelo.ClienteMapper;
@@ -51,11 +52,13 @@ public class ClienteController {
 		return "editar-cliente";
 	}
 	@PostMapping("/clientes/editar/{id}")
-	public String submitEditar(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingResult, Model model) {
+	public String submitEditar(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingResult, Model model) throws MiExcepcion {
 		//En caso de que la validación falle
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("cliente", cliente);
 
+			//PRUEBA DE MI ERROR PERSONALIZADO
+			//throw new MiExcepcion();
 			return "editar-cliente";
 		}
 
